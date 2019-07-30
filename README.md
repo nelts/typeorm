@@ -1,49 +1,34 @@
-# @nelts/template
+# @nelts/typeorm
 
-template for nelts project or plugin.
+typeorm for nelts
 
 # Usage
 
 ```bash
-npm ci
+npm i @nelts/typeorm
 ```
 
-You can install cli `npm i @nelts/cli`. Custom usage like this blow.
+in **app.ts**
 
-# Dev
+```ts
+import { LocalPlugin, LocalContext } from './index';
+import Photo from './modal/photo.ts';
+export default (plu: LocalPlugin) => {
+  let id: string;
+  // ...
+  plu.on('props', configs => {
+    id = plu.getComponent('@nelts/typeorm').preset({
+      type, host, port, username, password, database
+    }, [Photo]);
+  });
 
-```bash
-$ NODE_ENV=development ts-node node_modules/@nelts/process/dist/runtime.js --module=@nelts/nelts --base=. --config=nelts.config
-```
+  plu.on('ServerStarted', () => {
+    if (!id) throw new Error('cannot resolve connection');
+  })
 
-or 
-
-```bash
-nelts dev
-```
-
-> you should edit `package.json`, remove `"source": "dist",` property.
-
-# Build
-
-```bash
-$ rm -rf dist/ && tsc -d
-```
-
-or
-
-```bash
-nelts build
-```
-
-> you should edit `package.json`, add `"source": "dist",` property.
-
-# Pro
-
-```bash
-$ nelts start
-$ nelts restart
-$ netls stop
+  plu.on('ContextStart', (ctx: LocalContext) => ctx.connection = plu.getComponent('@nelts/typeorm').getConnection(id));
+  // ...
+}
 ```
 
 # License
