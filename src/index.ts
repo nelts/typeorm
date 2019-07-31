@@ -11,7 +11,7 @@ export type CustomConnectionType = {
 export interface LocalWorkerPlugin extends WorkerPlugin {
   preset(
     options: CustomConnectionType, 
-    entities: EntitySchema<any>[]
+    entities: (Function | string | EntitySchema<any>)[]
   ): string;
   getConnection(id: string): Connection;
 };

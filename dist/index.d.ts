@@ -9,7 +9,7 @@ export declare type CustomConnectionType = {
     database: string;
 };
 export interface LocalWorkerPlugin extends WorkerPlugin {
-    preset(options: CustomConnectionType, entities: EntitySchema<any>[]): string;
+    preset(options: CustomConnectionType, entities: (Function | string | EntitySchema<any>)[]): string;
     getConnection(id: string): Connection;
 }
 export interface LocalContext extends Context<LocalWorkerPlugin> {

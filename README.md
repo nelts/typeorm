@@ -8,26 +8,37 @@ typeorm for nelts
 npm i @nelts/typeorm
 ```
 
+in **index.ts**
+
+```ts
+import { Context, WorkerPlugin } from '@nelts/nelts';
+import { Connection } from 'typeorm';
+export interface LocalWorkerPlugin extends WorkerPlugin {
+  getConnection(): Connection;
+};
+export interface LocalContext extends Context<LocalWorkerPlugin> {
+  connection: Connection;
+};
+```
+
 in **app.ts**
 
 ```ts
-import { LocalPlugin, LocalContext } from './index';
-import Photo from './modal/photo.ts';
-export default (plu: LocalPlugin) => {
+import { LocalContext, LocalWorkerPlugin } from './index';
+import { CustomConnectionType, LocalWorkerPlugin as TypeOrmWorkerPlugin } from '@nelts/typeorm';
+import Package from './modal/package';
+export default (plu: LocalWorkerPlugin) => {
   let id: string;
-  // ...
-  plu.on('props', configs => {
-    id = plu.getComponent('@nelts/typeorm').preset({
-      type, host, port, username, password, database
-    }, [Photo]);
+  plu.on('props', (configs: { mysql: CustomConnectionType }) => id = (<TypeOrmWorkerPlugin>plu.getComponent('@nelts/typeorm')).preset(configs.mysql, [Package]));
+  plu.on('ContextStart', (ctx: LocalContext) => {
+    ctx.connection = plu.getConnection();
+    if (!ctx.connection) throw ctx.error('cannot find the connection');
   });
-
-  plu.on('ServerStarted', () => {
-    if (!id) throw new Error('cannot resolve connection');
-  })
-
-  plu.on('ContextStart', (ctx: LocalContext) => ctx.connection = plu.getComponent('@nelts/typeorm').getConnection(id));
-  // ...
+  plu.getConnection = () => {
+    if (id) return (<TypeOrmWorkerPlugin>plu.getComponent('@nelts/typeorm')).getConnection(id);
+    throw new Error('cannot find the connection');
+  }
+  plu.on('ContextReject', async (e: Error, ctx: LocalContext) => plu.logger.error('nelts context life status [ContextReject] invoked:', e));
 }
 ```
 

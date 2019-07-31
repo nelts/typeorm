@@ -20,8 +20,8 @@ exports.default = (plu) => {
     plu.getConnection = (id) => {
         if (!connections.has(id))
             throw new Error('cannot find the connection by id:' + id);
-        const schema = connections.get('id');
-        if (!schema.connection)
+        const schema = connections.get(id);
+        if (!schema || !schema.connection)
             throw new Error('database has not been init, please try later.');
         return schema.connection;
     };

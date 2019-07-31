@@ -5,7 +5,7 @@ import * as crypto from 'crypto';
 export default (plu: LocalWorkerPlugin) => {
   const connections: Map<string, {
     options: CustomConnectionType,
-    entities: EntitySchema<any>[],
+    entities: (Function | string | EntitySchema<any>)[],
     connection: Connection,
   }> = new Map();
   // plu.on('props', async configs => plu.logger.debug('nelts props received:', configs));
@@ -38,8 +38,8 @@ export default (plu: LocalWorkerPlugin) => {
 
   plu.getConnection = (id: string) => {
     if (!connections.has(id)) throw new Error('cannot find the connection by id:' + id);
-    const schema = connections.get('id');
-    if (!schema.connection) throw new Error('database has not been init, please try later.');
+    const schema = connections.get(id);
+    if (!schema || !schema.connection) throw new Error('database has not been init, please try later.');
     return schema.connection;
   }
 
