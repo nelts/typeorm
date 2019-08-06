@@ -4,6 +4,8 @@ typeorm for nelts
 
 # Usage
 
+`master` `worker` and `agent` is the same. We use `worker` for example:
+
 ```bash
 npm i @nelts/typeorm
 ```
@@ -29,16 +31,19 @@ import { CustomConnectionType, LocalWorkerPlugin as TypeOrmWorkerPlugin } from '
 import Package from './modal/package';
 export default (plu: LocalWorkerPlugin) => {
   let id: string;
-  plu.on('props', (configs: { mysql: CustomConnectionType }) => id = (<TypeOrmWorkerPlugin>plu.getComponent('@nelts/typeorm')).preset(configs.mysql, [Package]));
+  plu.on('props', (configs: { mysql: CustomConnectionType }) => {
+    const ormComponent = plu.getComponent('@nelts/typeorm') as TypeOrmWorkerPlugin;
+    id = ormComponent.typeorm.preset(configs.mysql, [Package]);
+  });
   plu.on('ContextStart', (ctx: LocalContext) => {
     ctx.connection = plu.getConnection();
     if (!ctx.connection) throw ctx.error('cannot find the connection');
   });
   plu.getConnection = () => {
-    if (id) return (<TypeOrmWorkerPlugin>plu.getComponent('@nelts/typeorm')).getConnection(id);
-    throw new Error('cannot find the connection');
+    const ormComponent = plu.getComponent('@nelts/typeorm') as TypeOrmWorkerPlugin;
+    if (!id) throw new Error('you cannot use getConnection method before recevie configs');
+    return ormComponent.typeorm.get(id);
   }
-  plu.on('ContextReject', async (e: Error, ctx: LocalContext) => plu.logger.error('nelts context life status [ContextReject] invoked:', e));
 }
 ```
 

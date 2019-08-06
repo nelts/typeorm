@@ -1,5 +1,25 @@
-import { Context, WorkerPlugin } from '@nelts/nelts';
-import { Connection, EntitySchema } from 'typeorm';
+import WorkerFactory, { WorkerPlugin } from '@nelts/worker';
+import AgentFactory, { AgentPlugin } from '@nelts/agent';
+import MasterFactory, { MasterPlugin } from '@nelts/master';
+import Http, { Context } from '@nelts/http';
+import TypeOrm from './typeorm';
+export interface LocalWorkerContext extends Context {
+}
+export interface LocalWorkerPlugin extends WorkerPlugin<Http> {
+    typeorm: TypeOrm;
+}
+export interface LocalWorkerFactory extends WorkerFactory<Http> {
+}
+export interface LocalAgentPlugin extends AgentPlugin {
+    typeorm: TypeOrm;
+}
+export interface LocalAgentFactory extends AgentFactory {
+}
+export interface LocalMasterFactory extends MasterFactory {
+}
+export interface LocalMasterPlugin extends MasterPlugin {
+    typeorm: TypeOrm;
+}
 export declare type CustomConnectionType = {
     type: any;
     host: string;
@@ -8,9 +28,4 @@ export declare type CustomConnectionType = {
     password: string;
     database: string;
 };
-export interface LocalWorkerPlugin extends WorkerPlugin {
-    preset(options: CustomConnectionType, entities: (Function | string | EntitySchema<any>)[]): string;
-    getConnection(id: string): Connection;
-}
-export interface LocalContext extends Context<LocalWorkerPlugin> {
-}
+export { TypeOrm, };
