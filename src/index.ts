@@ -1,15 +1,13 @@
-import WorkerFactory, { WorkerPlugin } from '@nelts/worker';
+import WorkerFactory, { WorkerPlugin, WorkerServiceFrameworker } from '@nelts/worker';
 import AgentFactory, { AgentPlugin } from '@nelts/agent';
 import MasterFactory, { MasterPlugin } from '@nelts/master';
-import Http, { Context } from '@nelts/http';
 import TypeOrm from './typeorm';
 
 // worker interfaces
-export interface LocalWorkerContext extends Context {}
-export interface LocalWorkerPlugin extends WorkerPlugin<Http> {
+export interface LocalWorkerPlugin<T extends WorkerServiceFrameworker> extends WorkerPlugin<T> {
   typeorm: TypeOrm,
 }
-export interface LocalWorkerFactory extends WorkerFactory<Http> {}
+export interface LocalWorkerFactory<T extends WorkerServiceFrameworker> extends WorkerFactory<T> {}
 
 // agent interfaces
 export interface LocalAgentPlugin extends AgentPlugin {
