@@ -1,6 +1,6 @@
 {
   "name": "@nelts/typeorm",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "The description of this project",
   "main": "dist/index.js",
   "source": "dist",
