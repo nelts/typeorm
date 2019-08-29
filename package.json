@@ -1,6 +1,6 @@
 {
   "name": "@nelts/typeorm",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "The description of this project",
   "main": "dist/index.js",
   "source": "dist",
@@ -30,9 +30,9 @@
   },
   "devDependencies": {
     "@nelts/cli": "^1.0.9",
-    "@nelts/master": "^1.0.36",
-    "@nelts/process": "^1.1.20",
+    "@nelts/master": "^1.0.45",
+    "@nelts/process": "^1.1.23",
     "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.2"
   }
 }

@@ -1,4 +1,4 @@
-import { LocalMasterPlugin, LocalMasterFactory } from './index';
+import { LocalMasterPlugin } from './index';
 import TypeOrm from './typeorm';
 
 export default (plu: LocalMasterPlugin) => {

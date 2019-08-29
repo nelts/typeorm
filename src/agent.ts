@@ -1,4 +1,4 @@
-import { LocalAgentPlugin, LocalAgentFactory } from './index';
+import { LocalAgentPlugin } from './index';
 import TypeOrm from './typeorm';
 
 export default (plu: LocalAgentPlugin) => {

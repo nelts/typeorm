@@ -1,4 +1,4 @@
-import { LocalWorkerPlugin, LocalWorkerFactory } from './index';
+import { LocalWorkerPlugin } from './index';
 import TypeOrm from './typeorm';
 
 export default (plu: LocalWorkerPlugin<any>) => {
