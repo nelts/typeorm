@@ -6,10 +6,9 @@ function AutoBindWorkerORM(name, plu, configs, Tables) {
     const app = plu.app;
     const ormComponent = plu.getComponent('@nelts/typeorm');
     const id = ormComponent.typeorm.preset(configs, Tables);
-    const conn = ormComponent.typeorm.get(id);
     app.on('ContextStop', async (ctx) => ctx[name] && await ctx[name].release());
     app.on('ContextStart', async (ctx) => {
-        ctx[name] = conn.createQueryRunner();
+        ctx[name] = ormComponent.typeorm.get(id).createQueryRunner();
         await ctx[name].connect();
         ctx[name].begin = async () => {
             await ctx[name].startTransaction();
