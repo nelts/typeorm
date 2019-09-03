@@ -46,6 +46,7 @@ export default class TypeOrm {
         logging: true,
         logger: 'advanced-console',
         loggerLevel: 'debug',
+        charset: 'utf8mb4_unicode_ci'
       });
       schema.connection = conn;
       this._connections.set(key, schema);
